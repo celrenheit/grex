@@ -24,6 +24,15 @@ module.exports = (function(){
     this.resultFormatter = new ResultFormatter();
     this.argumentHandler = new ArgumentHandler(this.options);
 
+    this.Gremlin = new Gremlin(this, {});
+    Object.defineProperty(this, 'g', {
+      get: function() {
+        var graph = new Graph(this.Gremlin);
+
+        return graph;
+      }
+    });
+
     _.extend(this, classes);
     this.ClassTypes = classes;
   }
