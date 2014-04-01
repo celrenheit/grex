@@ -81,14 +81,14 @@ describe('Graph elements', function() {
 
   describe('.keys()', function() {
     it("should chain .keys()", function() {
-      var query = gRex.gremlin().g.v(1).keys();
+      var query = gRex.g.v(1).keys();
       query.gremlin.script.should.equal("g.v(1).keys()");
     });
   });
 
   describe('.values', function() {
     it("should chain .values()", function() {
-      var query = gRex.gremlin().g.v(1).values();
+      var query = gRex.g.v(1).values();
       query.gremlin.script.should.equal("g.v(1).values()");
     });
   });

@@ -22,7 +22,7 @@ describe('Graph methods', function() {
   describe('.addVertex()', function() {
     describe('when called with "{..}" arguments signature and no _id property', function() {
       before(function() {
-        var g = gRex.gremlin().g;
+        var g = gRex.g;
         vertex = g.addVertex({ foo: "bar" });
       });
 
@@ -45,7 +45,7 @@ describe('Graph methods', function() {
 
     describe('when called with "{..}" arguments signature and an _id property', function() {
       before(function() {
-        var g = gRex.gremlin().g;
+        var g = gRex.g;
         vertex = g.addVertex({ foo: 'bar', _id: 1 });
       });
 
@@ -71,7 +71,7 @@ describe('Graph methods', function() {
   describe('.addEdge()', function() {
     describe('when called with "_outV, _inV, label, {..}" arguments signature', function() {
       before(function() {
-        var g = gRex.gremlin().g;
+        var g = gRex.g;
         edge = g.addEdge(20, 30, "knows", { since: 'now' });
       });
 
@@ -102,7 +102,7 @@ describe('Graph methods', function() {
   describe('.createIndex()', function() {
     it('should handle string, Element.class arguments', function () {
       // it("should support g.createIndex()", function() {
-        var query = gRex.gremlin().g.createIndex("my-index", 'Vertex.class');
+        var query = gRex.g.createIndex("my-index", 'Vertex.class');
         query.gremlin.script.should.equal("g.createIndex('my-index',Vertex.class)");
       // });
     });
@@ -111,20 +111,20 @@ describe('Graph methods', function() {
 
   describe('.idx()', function() {
     it("should handle `name, {key: value}` arguments", function() {
-      var query = gRex.gremlin().g.idx("my-index", {'name':'marko'});
+      var query = gRex.g.idx("my-index", {'name':'marko'});
       query.gremlin.script.should.equal("g.idx('my-index')[[name:'marko']]");
     });
 
     it("should support g.idx().put()", function() {
       var gremlin = gRex.gremlin();
-      var query = gRex.gremlin().g.idx("my-index").put("name", "marko", gremlin.g.v(1));
+      var query = gRex.g.idx("my-index").put("name", "marko", gremlin.g.v(1));
       query.gremlin.script.should.equal("g.idx('my-index').put('name','marko',g.v(1))");
     });
   });
 
   describe('.dropIndex()', function() {
     it("should handle `string` argument", function() {
-      var query = gRex.gremlin().g.dropIndex("my-index");
+      var query = gRex.g.dropIndex("my-index");
       query.gremlin.script.should.equal("g.dropIndex('my-index')");
     });
   });
