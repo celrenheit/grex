@@ -57,6 +57,16 @@ module.exports = (function() {
     this.script += script;
   };
 
+   /**
+   * Prepend an arbitrary Gremlin string before current script.
+   *
+   * @private
+   * @param {String} script
+   */
+  Gremlin.prototype.prepend = function(script) {
+    this.script = script + this.script;
+  };
+
   /**
    * Append an arbitrary Gremlin string to current script as a new line.
    *

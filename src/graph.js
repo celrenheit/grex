@@ -206,5 +206,38 @@ module.exports = (function() {
     return edge;
   };
 
+  Graph.prototype.setIdentifier = function (identifier) {
+    this.identifier = identifier ? identifier : this.generateIdentifier();
+    this.gremlin.prepend(this.identifier + " = ");
+
+    return this;
+  };
+
+  Graph.prototype.getIdentifier = function() {
+    return this.identifier;
+  };
+
+  Graph.prototype.generateIdentifier = function() {
+    var chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXTZabcdefghiklmnopqrstuvwxyz";
+    var string_length = 10;
+    var randomstring = '';
+
+    for (var x=0;x<string_length;x++) {
+
+        var letterOrNumber = Math.floor(Math.random() * 2);
+        if (letterOrNumber == 0) {
+            var newNum = Math.floor(Math.random() * 9);
+            randomstring += newNum;
+        } else {
+            var rnum = Math.floor(Math.random() * chars.length);
+            randomstring += chars.substring(rnum,rnum+1);
+        }
+
+    }
+
+    return "e" + randomstring;
+  };
+
+
   return Graph;
 })();

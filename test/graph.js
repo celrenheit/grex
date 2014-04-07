@@ -130,4 +130,13 @@ describe('Graph methods', function() {
   });
 
 
+  describe('.setIdentifier()', function() {
+    it("should set an defined identifier", function(done) {
+      var gremlin = gRex.gremlin();
+      var g = gremlin.g;
+      g.setIdentifier("lop").V('name', 'lop');
+      g.gremlin.script.should.equal("lop = g.V('name','lop')");
+      done();
+    });
+  });
 });
