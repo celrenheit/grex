@@ -206,7 +206,7 @@ module.exports = (function() {
     return edge;
   };
 
-  Graph.prototype.setIdentifier = function (identifier) {
+  Graph.prototype.setIdentifier = Graph.prototype.identify = function (identifier) {
     this.identifier = identifier ? identifier : this.generateIdentifier();
     this.gremlin.prepend(this.identifier + " = ");
 
