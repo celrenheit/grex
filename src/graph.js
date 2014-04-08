@@ -218,24 +218,9 @@ module.exports = (function() {
   };
 
   Graph.prototype.generateIdentifier = function() {
-    var chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXTZabcdefghiklmnopqrstuvwxyz";
-    var string_length = 10;
-    var randomstring = '';
-
-    for (var x=0;x<string_length;x++) {
-
-        var letterOrNumber = Math.floor(Math.random() * 2);
-        if (letterOrNumber == 0) {
-            var newNum = Math.floor(Math.random() * 9);
-            randomstring += newNum;
-        } else {
-            var rnum = Math.floor(Math.random() * chars.length);
-            randomstring += chars.substring(rnum,rnum+1);
-        }
-
-    }
-
-    return "e" + randomstring;
+    // Old one: http://stackoverflow.com/questions/4872380/uniqid-in-javascript-jquery
+    // Current one: http://www.quora.com/JavaScript-programming-language/What-is-the-best-way-to-make-truly-unique-variable-names
+    return "_e" + ( 0 | Math.random() * 100 ) + "_" + ( +new Date() );
   };
 
 

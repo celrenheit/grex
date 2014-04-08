@@ -130,12 +130,20 @@ describe('Graph methods', function() {
   });
 
 
-  describe('.identify()', function() {
+  describe('.identify() or .setIdentifier()', function() {
     it("should set an defined identifier", function(done) {
       var gremlin = gRex.gremlin();
       var g = gremlin.g;
       g.identify("lop").V('name', 'lop');
       g.gremlin.script.should.equal("lop = g.V('name','lop')");
+      done();
+    });
+
+    it("should get a unique variable name for it's identifier", function(done) {
+      var gremlin = gRex.gremlin();
+      var g = gremlin.g;
+      g.identify().V('name', 'lop');
+      g.gremlin.script.should.equal(g.getIdentifier() + " = g.V('name','lop')");
       done();
     });
   });
