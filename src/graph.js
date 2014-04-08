@@ -206,8 +206,8 @@ module.exports = (function() {
     return edge;
   };
 
-  Graph.prototype.setIdentifier = Graph.prototype.identify = function (identifier) {
-    this.identifier = identifier ? identifier : this.generateIdentifier();
+  Graph.prototype.setIdentifier = Graph.prototype.identify = function (identifier, type) {
+    this.identifier = identifier ? identifier : this.generateIdentifier(type);
     this.gremlin.prepend(this.identifier + " = ");
 
     return this;
@@ -217,10 +217,17 @@ module.exports = (function() {
     return this.identifier;
   };
 
-  Graph.prototype.generateIdentifier = function() {
+  Graph.prototype.generateIdentifier = function(type) {
     // Old one: http://stackoverflow.com/questions/4872380/uniqid-in-javascript-jquery
     // Current one: http://www.quora.com/JavaScript-programming-language/What-is-the-best-way-to-make-truly-unique-variable-names
-    return "_e" + ( 0 | Math.random() * 100 ) + "_" + ( +new Date() );
+    
+    var generatedId = '';
+
+    generatedId +=  (typeof type !== "string")  ? "element" : type;
+    
+    generatedId += + _ + ( 0 | Math.random() * 100 ) + "_" + ( +new Date() ); // Random string with current timestamp
+
+    return generatedId;
   };
 
 
