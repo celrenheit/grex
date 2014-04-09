@@ -191,12 +191,19 @@ module.exports = (function() {
     edge._inV = arguments[1];
     edge._label = arguments[2];
 
+    if(edge._outV instanceof Graph && edge._inV instanceof Graph) { // Temporary fix: Add script inline when an identifier is already set
+      // Problem here! Solve multiple injection of whole gremlin.script each time.
+      // TODO: Rethink a better architecture 
+      this.gremlin.line(edge._outV.gremlin.script);
+      this.gremlin.line(edge._inV.gremlin.script);
+    }
+
     _.each(properties, function(value, key) {
       edge[key] = value;
     });
 
     delete properties._id;
-
+    
     var gremlinLine = 'g.addEdge('+ optionalId + edge._outV.identifier +','+ edge._inV.identifier +',"'+ edge._label +'",'+ this.gremlin.stringifyArgument(properties) +')';
 
     this.gremlin.line(gremlinLine);
@@ -206,13 +213,17 @@ module.exports = (function() {
     return edge;
   };
 
-  Graph.prototype.setIdentifier = Graph.prototype.identify = function (identifier, type) {
-    this.identifier = identifier ? identifier : this.generateIdentifier(type);
+  Graph.prototype.identify = Graph.prototype.setIdentifier = function (identifier, type) {
+    this.identifier  = this.gremlin.identifier = identifier ? identifier : this.generateIdentifier(type);
+    this.parentGremlin[this.identifier] = this;
     this.gremlin.prepend(this.identifier + " = ");
 
     return this;
   };
 
+  Graph.prototype.destroy = function() {
+    this.parentGremlin.line(this.identifier + ".remove()");
+  };
   Graph.prototype.getIdentifier = function() {
     return this.identifier;
   };

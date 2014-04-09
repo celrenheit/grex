@@ -1,7 +1,16 @@
 var gRex = require('../index.js');
 
-before(function(done){
-  gRex.connect()
+
+
+
+var alice, bob;
+var james, waldo;
+
+describe('Transaction commit', function() {
+  before(function(done){
+  gRex.connect({
+    graph: 'tinkergraph'
+  })
   .then(function(result) {
     gRex = result;
     done();
@@ -11,11 +20,6 @@ before(function(done){
   });
 });
 
-
-var alice, bob;
-var james, waldo;
-
-describe('Transaction commit', function() {
   describe('when adding elements to the graph in a transaction', function() {
     it('should add a vertex in a transaction', function(done) {
       var gremlin = gRex.gremlin();
@@ -39,7 +43,33 @@ describe('Transaction commit', function() {
         done();
       });
     });
+    it('should add an edge between two existing vertices', function(done) {
+      var gremlin = gRex.gremlin();
+      
+      gremlin.g.identify("v1").V('name', 'Bob').next(); // Stored in gremlin.v1
+      gremlin.g.identify("v2").V('name', 'Ryan').next(); // Stored in gremlin.v2
+      
+      gremlin.g.addEdge(gremlin.v1, gremlin.v2, 'talks', { since: Date.now() });
 
+      // This works but add a second time the declaration of each identifier variable
+      // gremlin.g.addEdge(gremlin.v2, gremlin.v1, 'played', { since: Date.now() });
+
+      // Remove variables from rexster's current gremlin session
+      // gremlin.g.identify("v1").destroy();
+      // gremlin.g.identify("v2").destroy();
+      
+      gremlin.exec(function(err, results) {
+        results.should.have.property('success', true);
+        var edge = results.results[0];
+        edge.should.have.property('_outV');
+        edge.should.have.property('_inV');
+        edge.should.have.property('_type', 'edge');
+        edge.should.have.property('_label', 'talks');
+        done();
+      });
+
+ 
+    });
     // Clean up: remove james and waldo from the database
     // after(function(done) {
     //   var gremlin = gRex.gremlin;
